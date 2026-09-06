@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cidade do Idoso Dona Cota - Controle de Veículos</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="mobile-container">
+      <header>
+        <div class="text">
+          Cidade do Idoso
+          <strong>Dona Cota</strong>
+          <span>Cadastro de veículos</span>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="view-cadastrar" class="view active">
+          <form id="form-veiculo">
+            <div class="form-group">
+              <label for="condutor">Nome do Condutor</label>
+              <input
+                type="text"
+                id="condutor"
+                required
+                placeholder="Digite o nome completo"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="veiculo">Marca e Modelo do Veículo</label>
+              <input
+                type="text"
+                id="veiculo"
+                required
+                placeholder="Ex: Fiat Uno, Honda Civic"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="placa">Placa do Veículo</label>
+              <input
+                type="text"
+                id="placa"
+                required
+                placeholder="Ex: ABC-1234 ou ABC1D23"
+                style="text-transform: uppercase"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="cor">Cor do Veículo</label>
+              <input
+                type="text"
+                id="cor"
+                required
+                placeholder="Ex: Prata, Preto, Branco"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="observacoes">Observações</label>
+              <textarea
+                id="observacoes"
+                placeholder="Informações adicionais (opcional)"
+              ></textarea>
+            </div>
+
+            <div class="photo-section">
+              <div class="photo-preview" id="photo-preview-container">
+                <span id="photo-placeholder">Nenhuma foto capturada</span>
+              </div>
+              <input
+                type="file"
+                id="camera-input"
+                accept="image/*"
+                capture="environment"
+                style="display: none"
+              />
+              <button type="button" class="btn-camera" id="btn-trigger-camera">
+                <span class="material-icons">photo_camera</span> Abrir Câmera
+              </button>
+            </div>
+
+            <button type="submit" class="btn-submit">Salvar Cadastro</button>
+          </form>
+        </section>
+
+        <section id="view-ver" class="view">
+          <div class="search-box">
+            <span class="material-icons">search</span>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Pesquisar por placa, condutor ou modelo..."
+            />
+          </div>
+
+          <div id="lista-veiculos"></div>
+        </section>
+      </div>
+
+      <nav class="floating-footer">
+        <button class="nav-item active" id="btn-tab-cadastrar">
+          <span class="material-icons">add_circle</span>
+          Cadastrar
+        </button>
+        <button class="nav-item" id="btn-tab-ver">
+          <span class="material-icons">list_alt</span>
+          Ver Cadastros
+        </button>
+      </nav>
+    </div>
+
+    <div id="loading-overlay">Salvando dados...</div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
