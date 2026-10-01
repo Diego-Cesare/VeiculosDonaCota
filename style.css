@@ -27,13 +27,13 @@ body {
 header {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
   background-color: #ffffff;
   font-size: 1.4rem;
   color: #393b3d;
-  height: 180px;
-  padding: 10px;
+  height: 140px;
   border-bottom: solid 1px #0e0e0e;
+  margin-bottom: 10px;
 }
 
 header span {
