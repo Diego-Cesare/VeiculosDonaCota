@@ -237,7 +237,7 @@ textarea {
 }
 
 .btn-camera {
-  background-color: var(--primary-light);
+  background-color: lightcoral;
   color: white;
   border: none;
   padding: 10px 16px;
@@ -252,7 +252,7 @@ textarea {
 }
 
 .btn-submit {
-  background-color: var(--primary-color);
+  background-color: lightskyblue;
   color: white;
   border: none;
   width: 100%;
@@ -339,7 +339,7 @@ textarea {
   padding: 4px;
   width: 84px;
   border-radius: 4px;
-  background-color: rgba(240, 128, 128, 0.21);
+  background-color: rgba(255, 251, 251, 0.787);
   display: flex;
   align-items: center;
   justify-content: center;
