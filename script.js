@@ -21,7 +21,7 @@ const firebaseConfig = {
   storageBucket: "donacotaveiculos.firebasestorage.app",
   messagingSenderId: "850574353815",
   appId: "1:850574353815:web:42b2c48cdf5c93e4d850d2",
-  measurementId: "G-J99RE9NKYR"
+  measurementId: "G-J99RE9NKYR",
 };
 
 // Inicializar Firebase
@@ -63,13 +63,12 @@ function comprimirImagem(file, maxWidth = 800, quality = 0.7) {
 }
 
 // Controle de Abas
+// ... (mantenha a parte inicial do Firebase e compactação de imagem igual)
+
+// Controle de Abas atualizado para incluir a aba 'tabela'
 function switchView(viewName) {
-  document
-    .querySelectorAll(".view")
-    .forEach((v) => v.classList.remove("active"));
-  document
-    .querySelectorAll(".nav-item")
-    .forEach((n) => n.classList.remove("active"));
+  document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach((n) => n.classList.remove("active"));
 
   if (viewName === "cadastrar") {
     document.getElementById("view-cadastrar").classList.add("active");
@@ -77,9 +76,112 @@ function switchView(viewName) {
   } else if (viewName === "ver") {
     document.getElementById("view-ver").classList.add("active");
     document.getElementById("btn-tab-ver").classList.add("active");
-    carregarVeiculos();
+    carregarVeiculos(); // Carrega os dados para a listagem em cards
+  } else if (viewName === "tabela") {
+    document.getElementById("view-tabela").classList.add("active");
+    document.getElementById("btn-tab-tabela").classList.add("active");
+    carregarVeiculosParaTabela(); // Carrega/Atualiza os dados na tabela
   }
 }
+
+// Eventos de clique do menu inferior
+document.getElementById("btn-tab-cadastrar").addEventListener("click", () => {
+  switchView("cadastrar");
+});
+
+document.getElementById("btn-tab-ver").addEventListener("click", () => {
+  switchView("ver");
+});
+
+const btnTabTabela = document.getElementById("btn-tab-tabela");
+if (btnTabTabela) {
+  btnTabTabela.addEventListener("click", () => {
+    switchView("tabela");
+  });
+}
+
+// Função para popular a tabela em formato de lista/planilha
+function renderizarTabela(dados) {
+  const tbody = document.getElementById("tabela-corpo");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (dados.length === 0) {
+    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:#888;'>Nenhum veículo encontrado.</td></tr>";
+    return;
+  }
+
+  dados.forEach((item) => {
+    let dataFormatada = "";
+    if (item.dataCriacao && item.dataCriacao.toDate) {
+      dataFormatada = item.dataCriacao.toDate().toLocaleDateString("pt-BR");
+    }
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${item.condutor || ""}</td>
+      <td>${item.veiculo || ""}</td>
+      <td>${item.placa || ""}</td>
+      <td>${item.cor || ""}</td>
+      <td>${item.observacoes || ""}</td>
+      <td>${dataFormatada}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Função auxiliar para garantir que os dados estejam carregados na aba de tabela
+async function carregarVeiculosParaTabela() {
+  if (todosVeiculos.length === 0) {
+    await carregarVeiculosSilencioso();
+  }
+  renderizarTabela(todosVeiculos);
+}
+
+async function carregarVeiculosSilencioso() {
+  try {
+    const q = query(collection(db, "veiculos"), orderBy("dataCriacao", "desc"));
+    const querySnapshot = await getDocs(q);
+    todosVeiculos = [];
+    querySnapshot.forEach((doc) => {
+      todosVeiculos.push({ id: doc.id, ...doc.data() });
+    });
+  } catch (error) {
+    console.error("Erro ao buscar veículos: ", error);
+  }
+}
+
+// Funcionalidade do Botão de Exportar para Excel
+const btnExportExcel = document.getElementById("btn-export-excel");
+if (btnExportExcel) {
+  btnExportExcel.addEventListener("click", () => {
+    if (!todosVeiculos || todosVeiculos.length === 0) {
+      alert("Não há dados para exportar.");
+      return;
+    }
+
+    // Mapeia os dados amigáveis para a planilha
+    const dadosExcel = todosVeiculos.map((item) => ({
+      Condutor: item.condutor || "",
+      Veículo: item.veiculo || "",
+      Placa: item.placa || "",
+      Cor: item.cor || "",
+      Observações: item.observacoes || "",
+      Data: item.dataCriacao && item.dataCriacao.toDate ? item.dataCriacao.toDate().toLocaleDateString("pt-BR") : ""
+    }));
+
+    // Cria o arquivo Excel usando SheetJS
+    const worksheet = XLSX.utils.json_to_sheet(dadosExcel);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Veículos Cadastrados");
+
+    // Faz o download automático do arquivo .xlsx
+    XLSX.writeFile(workbook, "Relatorio_Veiculos_DonaCota.xlsx");
+  });
+}
+
+// ... (Mantenha o restante das suas funções de envio, exclusão e busca já existentes)
 
 // Atrelando os eventos dos botões de navegação inferior
 document.getElementById("btn-tab-cadastrar").addEventListener("click", () => {
@@ -125,7 +227,7 @@ function limparFormulario() {
   previewContainer.innerHTML = `<span id="photo-placeholder">Nenhuma foto capturada</span>`;
   base64Image = "";
   editandoId = null;
-  
+
   // Opcional: Mudar o texto do botão de envio de volta para "Cadastrar" se houver um
   const btnSubmit = document.getElementById("btn-submit-veiculo");
   if (btnSubmit) btnSubmit.innerText = "Cadastrar Veículo";
@@ -171,7 +273,9 @@ if (formVeiculo) {
       switchView("ver");
     } catch (error) {
       console.error("Erro ao salvar veículo: ", error);
-      alert("Erro ao salvar cadastro. A imagem pode estar muito grande ou houve falha na rede.");
+      alert(
+        "Erro ao salvar cadastro. A imagem pode estar muito grande ou houve falha na rede.",
+      );
     } finally {
       if (loadingOverlay) loadingOverlay.style.display = "none";
     }
@@ -209,9 +313,14 @@ function renderizarLista(dados) {
   const listaContainer = document.getElementById("lista-veiculos");
   if (!listaContainer) return;
 
+   // Atualiza o contador se o elemento existir na tela
+  const totalEl = document.getElementById("total-car");
+  if (totalEl) {
+    totalEl.textContent = dados.length;
+  }
   listaContainer.innerHTML = "";
 
-  if (dados.length === 0) {
+  if (dados.length === 0) {    
     listaContainer.innerHTML =
       "<p style='text-align:center; color:#888;'>Nenhum veículo encontrado.</p>";
     return;
@@ -232,7 +341,7 @@ function renderizarLista(dados) {
           <p><strong>Placa:</strong> ${item.placa}</p>
           <p><strong>Condutor:</strong> ${item.condutor}</p>
           ${item.observacoes ? `<div class="obs">Obs: ${item.observacoes}</div>` : ""}
-      </div>
+          </div>
       <div class="card-actions">
         <button class="btn-edit" data-id="${item.id}">Editar</button>
         <button class="btn-delete" data-id="${item.id}">Deletar</button>
@@ -240,6 +349,8 @@ function renderizarLista(dados) {
     `;
     listaContainer.appendChild(card);
   });
+
+
 }
 
 // Botões de ação nos cards (edit/delete)
@@ -249,18 +360,21 @@ if (listaVeiculos) {
     const btnEdit = e.target.closest(".btn-edit");
     if (btnEdit) {
       const id = btnEdit.dataset.id;
-      
+
       // Encontra o veículo correspondente na lista carregada
       const veiculoParaEditar = todosVeiculos.find((v) => v.id === id);
-      
+
       if (veiculoParaEditar) {
         // Preenche os inputs do formulário com os dados atuais
-        document.getElementById("condutor").value = veiculoParaEditar.condutor || "";
-        document.getElementById("veiculo").value = veiculoParaEditar.veiculo || "";
+        document.getElementById("condutor").value =
+          veiculoParaEditar.condutor || "";
+        document.getElementById("veiculo").value =
+          veiculoParaEditar.veiculo || "";
         document.getElementById("placa").value = veiculoParaEditar.placa || "";
         document.getElementById("cor").value = veiculoParaEditar.cor || "";
-        document.getElementById("observacoes").value = veiculoParaEditar.observacoes || "";
-        
+        document.getElementById("observacoes").value =
+          veiculoParaEditar.observacoes || "";
+
         // Trata a foto existente
         base64Image = veiculoParaEditar.fotoUrl || "";
         if (base64Image) {

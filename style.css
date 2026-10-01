@@ -24,17 +24,67 @@ body {
   min-height: 100vh;
 }
 
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+  font-size: 2rem;
+  color: #393b3d;
+  height: 180px;
+  padding: 10px;
+  border-bottom: solid 1px #0e0e0e;
+}
+
+header span {
+  font-size: 1rem;
+}
+
+/* Footer Flutuante */
+.floating-footer {
+  display: flex;
+  width: 100%;
+  padding: 10px 0px;
+  border-radius: 10px;
+}
+
+.nav-item {
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333333;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  border-radius: 10px;
+  padding: 5px 0px;
+  flex: 1;
+}
+
+.nav-item .material-icons {
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+
+.nav-item.active {
+  color: lightcoral;
+  background-color: rgba(240, 128, 128, 0.394);
+  font-weight: 600;
+}
+
 /* Container simulando tela de smartphone */
 .mobile-container {
-  background-color: var(--primary-color);
+  background: #ffffff;
   width: 100%;
   max-width: 480px;
   height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  margin: 15px;
 }
 
 @media (min-width: 481px) {
@@ -44,52 +94,71 @@ body {
   }
 }
 
-header {
+.view .total {
+  font-size: 18px;
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  background-color: var(--primary-color);
-  color: white;
-  height: 18%;
-  padding: 16px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
-  z-index: 10;
+  background-color: rgba(240, 128, 128, 0.199);
+  color: lightcoral;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
-header .text {
+.header-tabela {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 10px 5px;
 }
 
-header .text strong {
-  font-size: 2rem;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  padding: 0px 20px;
-  border-radius: 10px;
+.btn-excel {
+  background-color: lightcoral;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-header .text span {
-  font-size: 1.2rem;
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-header img {
-  width: 120px;
-  height: 100px;
-  border-radius: 10px;
-  padding: 12px;
-  background-color: var(--bg-color);
+#tabela-veiculos {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+#tabela-veiculos th,
+#tabela-veiculos td {
+  border-bottom: 1px solid #0e0e0e;
+  padding: 10px 12px;
+  text-align: left;
+  color: #0a0a0a;
+}
+
+#tabela-veiculos th {
+  background-color: lightcoral;
+  color: rgb(255, 251, 251);
+  font-weight: 600;
 }
 
 .content {
   flex: 1;
   overflow-y: auto;
-  background-color: var(--bg-color);
-  padding: 16px;
-  padding-bottom: 90px; /* Espaço para o menu flutuante */
+  padding-bottom: 20px; /* Espaço para o menu flutuante */
 }
 
 .view {
@@ -98,26 +167,29 @@ header img {
 
 .view.active {
   display: block;
+  width:100%;
+
 }
 
 /* Formulário */
 .form-group {
   margin-bottom: 16px;
+
 }
 
 label {
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  color: lightcoral;
+  font-size: 1rem;
 }
 
 input[type="text"],
 textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border-radius: 8px;
   font-size: 1rem;
   outline: none;
@@ -126,7 +198,7 @@ textarea {
 
 input[type="text"]:focus,
 textarea:focus {
-  border-color: var(--primary-color);
+  border-color: lightcoral;
 }
 
 textarea {
@@ -213,7 +285,7 @@ textarea {
 
 .vehicle-card {
   border-radius: 12px;
-  border: dashed 1px #00000032;
+  border: solid 1px #000000;
   margin-bottom: 16px;
   overflow: hidden;
   display: flex;
@@ -222,7 +294,7 @@ textarea {
 
 .vehicle-card img {
   width: 100%;
-  height: 140px;
+  height: 200px;
   object-fit: cover;
 }
 
@@ -231,8 +303,8 @@ textarea {
 }
 
 .vehicle-info h3 {
-  font-size: 1rem;
-  color: var(--accent-color);
+  font-size: 1.2rem;
+  color: lightcoral;
   margin-bottom: 4px;
 }
 
@@ -244,15 +316,16 @@ textarea {
 
 .vehicle-info .obs {
   margin-top: 8px;
-  font-style: italic;
-  background: #fdfdfd;
+  font-weight: bold;
+  color: lightcoral;
+  background: rgba(240, 128, 128, 0.078);
   padding: 6px;
-  border-left: 3px solid var(--primary-light);
+  border-left: solid 3px lightcoral;
   font-size: 0.8rem;
 }
 
-.card-actions{
-  background-color: var(--primary-color);
+.card-actions {
+  background-color: rgba(240, 128, 128, 0.373);
   padding: 10px;
   display: flex;
   align-items: center;
@@ -266,7 +339,7 @@ textarea {
   padding: 4px;
   width: 84px;
   border-radius: 4px;
-  background-color: var(--bg-color);
+  background-color: rgba(240, 128, 128, 0.21);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -275,53 +348,11 @@ textarea {
 }
 
 .card-actions .btn-edit {
-  color: var(--accent-color);
+  color: lightcoral;
 }
 
 .card-actions .btn-delete {
-  color: var(--danger-color);
-}
-
-/* Footer Flutuante */
-.floating-footer {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 440px;
-  background: rgba(26, 26, 26, 0.92);
-  backdrop-filter: blur(10px);
-  border-radius: 30px;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.nav-item {
-  background: transparent;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: color 0.2s;
-  flex: 1;
-}
-
-.nav-item .material-icons {
-  font-size: 24px;
-  margin-bottom: 2px;
-}
-
-.nav-item.active {
-  color: var(--bg-color);
-  font-weight: 600;
+  color: lightcoral;
 }
 
 /* Loading Spinner */
@@ -339,4 +370,3 @@ textarea {
   color: white;
   font-weight: 500;
 }
-

@@ -12,18 +12,30 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <!-- Biblioteca SheetJS para exportação Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="mobile-container">
       <header>
-        <div class="text">
-          Cidade do Idoso
-          <strong>Dona Cota</strong>
-          <span>Cadastro de veículos</span>
-        </div>
+        <div class="titulo">Cadastro de veiculos</div>
+        <span>Cidade do Idoso Dona Cota</span>
+        <nav class="floating-footer">
+          <button class="nav-item active" id="btn-tab-cadastrar">
+            <span class="material-icons">add_circle</span>
+            Cadastrar
+          </button>
+          <button class="nav-item" id="btn-tab-ver">
+            <span class="material-icons">list_alt</span>
+            Ver Cadastros
+          </button>
+          <button class="nav-item" id="btn-tab-tabela">
+            <span class="material-icons">table_chart</span>
+            Lista
+          </button>
+        </nav>
       </header>
-
       <div class="content">
         <section id="view-cadastrar" class="view active">
           <form id="form-veiculo">
@@ -92,37 +104,59 @@
               </button>
             </div>
 
-            <button type="submit" class="btn-submit">Salvar Cadastro</button>
+            <button type="submit" class="btn-submit" id="btn-submit-veiculo">
+              Salvar Cadastro
+            </button>
           </form>
         </section>
 
         <section id="view-ver" class="view">
+          <div class="total">
+            Total de veiculos
+            <span id="total-car">0</span>
+          </div>
           <div class="search-box">
             <span class="material-icons">search</span>
             <input
               type="text"
               id="search-input"
-              placeholder="Pesquisar por placa, condutor ou modelo..."
+              placeholder="Pesquisar por placa, condutor"
             />
           </div>
 
           <div id="lista-veiculos"></div>
         </section>
-      </div>
 
-      <nav class="floating-footer">
-        <button class="nav-item active" id="btn-tab-cadastrar">
-          <span class="material-icons">add_circle</span>
-          Cadastrar
-        </button>
-        <button class="nav-item" id="btn-tab-ver">
-          <span class="material-icons">list_alt</span>
-          Ver Cadastros
-        </button>
-      </nav>
+        <section id="view-tabela" class="view">
+          <div class="header-tabela">
+            <h2>Relatório</h2>
+            <button id="btn-export-excel" class="btn-excel">
+              Baixar Excel
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table id="tabela-veiculos">
+              <thead>
+                <tr>
+                  <th>Condutor</th>
+                  <th>Veículo</th>
+                  <th>Placa</th>
+                  <th>Cor</th>
+                  <th>Observações</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-corpo">
+                <!-- Os dados serão injetados via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
     </div>
 
-    <div id="loading-overlay">Salvando dados...</div>
+    <div id="loading-overlay" style="display: none">Salvando dados...</div>
 
     <script type="module" src="script.js"></script>
   </body>
